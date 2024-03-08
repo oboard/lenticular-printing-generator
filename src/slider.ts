@@ -11,18 +11,18 @@ export class _Slider extends BuderWidget {
   _type = "slider";
   _tag = "input";
 
-  _model?: BuderState<string>;
-  constructor(model?: BuderState<string>, options?: SliderOptions) {
+  _model?: BuderState<number>;
+  constructor(model?: BuderState<number>, options?: SliderOptions) {
     super();
     if (!model) return;
 
     this._model = model;
     this._options = options;
 
-    this.attribute({ value: model.value });
+    this.attribute({ value: model.value.toString() });
     this.event({
       input: (e: any) => {
-        model.value = (e.target as HTMLInputElement).value;
+        model.value = Number((e.target as HTMLInputElement).value);
       },
     });
   }
@@ -36,14 +36,14 @@ export class _Slider extends BuderWidget {
 
     this._model?.subscribe((newValue) => {
       if (el) {
-        el.value = newValue;
+        el.value = newValue.toString();
       }
     });
-    el.value = this._model?.value ?? "";
+    el.value = (this._model?.value ?? "").toString();
 
     return super.render(el);
   }
 }
 
-export const Slider = (value: BuderState<string>, options: SliderOptions) =>
+export const Slider = (value: BuderState<number>, options: SliderOptions) =>
   new _Slider(value, options);

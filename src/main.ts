@@ -3,22 +3,36 @@ import { Grid } from "./grid";
 import { process } from "./process";
 import { Slider } from "./slider";
 import "./style.css";
-import { Col, Input, Row, View, px, Image, Builder, State } from "buder";
+import { Col, Input, Row, View, px, Image, Builder, State, Text } from "buder";
 
-const size = 512;
-let canvas = Canvas(size, size);
+export const height = State(10);
+const width = State(10);
+let canvas = Canvas(width.value, height.value);
 let imageList = State([] as string[]);
-export const gap = State("10");
+export const lpi = State(10);
 
 function draw() {
   let ctx = canvas.context!;
+  ctx.canvas.width = width.value * 256;
+  ctx.canvas.height = height.value * 256;
   process(imageList.value, ctx);
-  console.log(gap.value);
+  console.log(lpi.value);
 }
-gap.subscribe(draw);
+lpi.subscribe(draw);
+width.subscribe(draw);
+height.subscribe(draw);
+imageList.subscribe(draw);
 Row([
   Col([
-    Slider(gap, { min: 1, max: 100, step: 0.1 }).style({ width: "100%" }),
+    Text("width(inch):"),
+    Slider(width, { min: 1, max: 10, step: 0.1 }).style({ width: "100%" }),
+    Text(width),
+    Text("height(inch):"),
+    Slider(height, { min: 1, max: 10, step: 0.1 }).style({ width: "100%" }),
+    Text(height),
+    Text("lpi:"),
+    Slider(lpi, { min: 1, max: 100, step: 0.1 }).style({ width: "100%" }),
+    Text(lpi),
     // upload
     Input()
       .attribute({ type: "file" })
@@ -48,15 +62,24 @@ Row([
       () =>
         Grid([
           // 展示图片
-          ...imageList.value.map((img) => Image(img).style({ width: "100px" })),
+          ...imageList.value.map((img) =>
+            Image(img)
+              .style({ width: "100px" })
+              .event({
+                click: function (e: Event) {
+                  imageList.value = imageList.value.filter((i) => i !== img);
+                  draw();
+                },
+              })
+          ),
         ]),
       [imageList]
     ).expand,
   ]),
   View([
     canvas.style({
-      width: px(size),
-      height: px(size),
+      width: width + "in",
+      height: height + "in",
     }),
   ]).expand,
 ])

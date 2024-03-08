@@ -1,4 +1,4 @@
-import { gap } from "./main";
+import { height, lpi } from "./main";
 
 export function process(imageList: string[], ctx: CanvasRenderingContext2D) {
   // 绘制所有图片到画布上
@@ -30,7 +30,7 @@ export function process(imageList: string[], ctx: CanvasRenderingContext2D) {
       ctx.globalCompositeOperation = "destination-out";
       //   绘制黑线，按照gap的宽度
       ctx.fillStyle = "black";
-      const gapNumber = Number(gap.value);
+      const gapNumber = ctx.canvas.height / Number(lpi.value) / height.value * len;
       for (let y = 0; y < ctx.canvas.height; y += gapNumber) {
         ctx.fillRect(
           0,
