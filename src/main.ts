@@ -3,7 +3,7 @@ import { Grid } from "./grid";
 import { process } from "./process";
 import { Slider } from "./slider";
 import "./style.css";
-import { Col, Input, Row, View, px, Image, Builder, State, Text } from "buder";
+import { Col, Input, Row, View, Image, Builder, State, Text } from "buder";
 
 export const height = State(10);
 const width = State(10);
@@ -66,7 +66,7 @@ Row([
             Image(img)
               .style({ width: "100px" })
               .event({
-                click: function (e: Event) {
+                click: function (_: Event) {
                   imageList.value = imageList.value.filter((i) => i !== img);
                   draw();
                 },
@@ -78,8 +78,8 @@ Row([
   ]),
   View([
     canvas.style({
-      width: width + "in",
-      height: height + "in",
+      width: width.value + "in",
+      height: height.value + "in",
     }),
   ]).expand,
 ])
