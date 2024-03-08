@@ -1,19 +1,24 @@
 import { Canvas } from "./canvas";
 import { Grid } from "./grid";
 import { process } from "./process";
+import { Slider } from "./slider";
 import "./style.css";
 import { Col, Input, Row, View, px, Image, Builder, State } from "buder";
 
 const size = 512;
 let canvas = Canvas(size, size);
 let imageList = State([] as string[]);
+export const gap = State("10");
 
 function draw() {
   let ctx = canvas.context!;
   process(imageList.value, ctx);
+  console.log(gap.value);
 }
+gap.subscribe(draw);
 Row([
   Col([
+    Slider(gap, { min: 1, max: 100, step: 0.1 }).style({ width: "100%" }),
     // upload
     Input()
       .attribute({ type: "file" })
